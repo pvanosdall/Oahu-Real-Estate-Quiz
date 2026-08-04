@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Oahu Match | Hawaii LUX Homes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ============ CONFIG ============
+     Edit these values to personalize. See README.md for full setup. */
+  :root {
+    --color-bg: #FAF6EC;
+    --color-surface: #FFFFFF;
+    --color-ink: #16302E;
+    --color-ink-soft: #4A5F5C;
+    --color-line: #E4DCC8;
+    --color-primary: #0E4749;
+    --color-primary-light: #1C7A73;
+    --color-primary-pale: #E1EEEC;
+    --color-accent: #F2994A;
+    --color-accent-dark: #B5620F;
+    --color-accent-pale: #FCEADB;
+    --color-hibiscus: #E8637A;
+    --color-hibiscus-pale: #FBE6EA;
+    --radius-card: 20px;
+    --radius-control: 14px;
+    --shadow-card: 0 20px 50px -25px rgba(14, 71, 73, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-bg);
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(14,71,73,0.06), transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(242,153,74,0.08), transparent 45%);
+    background-attachment: fixed;
+    color: var(--color-ink);
+    font-family: 'Public Sans', -apple-system, sans-serif;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  .app-shell {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Tide progress bar ---------- */
+  .tide-wrap {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .tide-wrap.show { display: flex; }
+  .tide-track {
+    position: relative;
+    flex: 1;
+    height: 14px;
+    border-radius: 999px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    overflow: hidden;
+  }
+  .tide-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: linear-gradient(90deg, var(--color-primary-light), var(--color-primary));
+    border-radius: 999px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  .tide-fill::after {
+    content: "";
+    position: absolute;
+    top: 0; right: -1px; bottom: 0;
+    width: 10px;
+    background: radial-gradient(circle, rgba(255,255,255,0.55), transparent 70%);
+  }
+  .tide-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    white-space: nowrap;
+  }
+
+  /* ---------- Card ---------- */
+  .card {
+    background: var(--color-surface);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 28px 22px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    animation: rise 0.4s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent-dark);
+    margin-bottom: 8px;
+  }
+  .question-title {
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+  .question-sub {
+    font-size: 14.5px;
+    color: var(--color-ink-soft);
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+
+  /* ---------- Option cards (single choice, photo style) ---------- */
+  .option-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .option-grid.single-col { grid-template-columns: 1fr; }
+
+  .photo-option {
+    position: relative;
+    border: none;
+    border-radius: var(--radius-control);
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    aspect-ratio: 1 / 0.95;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .photo-option .ph-bg {
+    position: absolute; inset: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 12px;
+  }
+  .photo-option .ph-label {
+    color: #fff;
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.2;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  }
+  .photo-option::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%);
+  }
+  .photo-option .ph-label { position: relative; z-index: 2; }
+  .photo-option.selected {
+    outline: 3px solid var(--color-accent);
+    outline-offset: -3px;
+  }
+  .photo-option .ph-check {
+    position: absolute; top: 8px; right: 8px; z-index: 3;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--color-accent);
+    color: #fff; font-size: 14px; font-weight: 700;
+    align-items: center; justify-content: center;
+    display: none;
+  }
+  .photo-option.selected .ph-check { display: flex; }
+
+  /* placeholder gradients — swap for real photos later, see README */
+  .ph-1 { background: linear-gradient(135deg, #2F8F8A, #0E4749); }
+  .ph-2 { background: linear-gradient(135deg, #F2B15C, #D9752E); }
+  .ph-3 { background: linear-gradient(135deg, #6FA8A0, #1C4F4C); }
+  .ph-4 { background: linear-gradient(135deg, #E8637A, #A83854); }
+  .ph-5 { background: linear-gradient(135deg, #7FB5A8, #2C6E63); }
+  .ph-6 { background: linear-gradient(135deg, #E3B04B, #B5620F); }
+
+  /* ---------- Simple choice buttons ---------- */
+  .choice-list { display: flex; flex-direction: column; gap: 10px; }
+  .choice-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 15px 16px;
+    border: 1.5px solid var(--color-line);
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    font-family: 'Public Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s, background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .choice-btn:hover { border-color: var(--color-primary-light); }
+  .choice-btn.selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary-pale);
+  }
+  .choice-btn .radio-dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--color-line);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .choice-btn.selected .radio-dot { border-color: var(--color-primary); }
+  .choice-btn.selected .radio-dot::after {
+    content: "";
+    position: absolute; inset: 3px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+  .choice-sub { font-size: 12.5px; font-weight: 400; color: var(--color-ink-soft); margin-top: 2px; }
+
+  /* ---------- Chips (multi-select) ---------- */
+  .chip-grid { display: flex; flex-wrap: wrap; gap: 9px; }
+  .chip {
+    padding: 10px 16px;
+    border: 1.5px solid var(--color-line);
+    border-radius: 999px;
+    background: var(--color-surface);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .chip.selected {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+
+  /* ---------- Vibe swipe deck ---------- */
+  .deck-wrap { position: relative; }
+  .deck-stage {
+    position: relative;
+    height: 300px;
+    margin-bottom: 16px;
+  }
+  .deck-card {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 18px;
+    cursor: grab;
+    user-select: none;
+    box-shadow: 0 14px 30px -14px rgba(14,71,73,0.4);
+    transition: transform 0.3s cubic-bezier(.2,.8,.2,1), opacity 0.3s;
+  }
+  .deck-card::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.6) 100%);
+  }
+  .deck-card .deck-label {
+    position: relative; z-index: 2;
+    color: #fff;
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 500;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  }
+  .deck-card .deck-tag {
+    position: absolute; top: 14px; left: 14px; z-index: 2;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 5px 10px; border-radius: 999px;
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .deck-card .deck-tag.show-like { opacity: 1; background: rgba(30,140,110,0.9); color: #fff; }
+  .deck-card .deck-tag.show-skip { opacity: 1; background: rgba(200,70,70,0.9); color: #fff; }
+
+  .deck-actions {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 6px;
+  }
+  .deck-btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-line);
+    background: var(--color-surface);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .deck-btn.skip { color: var(--color-hibiscus); }
+  .deck-btn.like { color: var(--color-primary); }
+  .deck-progress {
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--color-ink-soft);
+    margin-bottom: 4px;
+  }
+  .deck-picks {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .deck-pick-tag {
+    font-size: 12.5px; font-weight: 600;
+    background: var(--color-primary-pale);
+    color: var(--color-primary);
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+
+  /* ---------- Steppers (beds/baths) ---------- */
+  .stepper-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .stepper-row:last-child { border-bottom: none; }
+  .stepper-label { font-size: 15px; font-weight: 600; }
+  .stepper-controls { display: flex; align-items: center; gap: 14px; }
+  .stepper-btn {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-line);
+    background: var(--color-surface);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-primary);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .stepper-value {
+    min-width: 26px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Fraunces', serif;
+  }
+
+  /* ---------- Expandable info ---------- */
+  .info-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px 0 0;
+  }
+  .info-panel {
+    display: none;
+    margin-top: 10px;
+    padding: 14px 15px;
+    background: var(--color-primary-pale);
+    border-radius: var(--radius-control);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--color-ink);
+  }
+  .info-panel.show { display: block; }
+  .info-panel strong { color: var(--color-primary); }
+
+  /* ---------- Inputs ---------- */
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    margin-bottom: 6px;
+  }
+  .field input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1.5px solid var(--color-line);
+    border-radius: var(--radius-control);
+    font-size: 15px;
+    font-family: 'Public Sans', sans-serif;
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+  .field input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: #fff;
+  }
+
+  /* ---------- Toggle switch ---------- */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--color-primary-pale);
+    border-radius: var(--radius-control);
+    margin-top: 6px;
+  }
+  .toggle-row .toggle-text { font-size: 13.5px; font-weight: 600; line-height: 1.4; }
+  .switch {
+    position: relative;
+    width: 46px; height: 27px;
+    flex-shrink: 0;
+    border-radius: 999px;
+    background: var(--color-line);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .switch.on { background: var(--color-primary); }
+  .switch::after {
+    content: "";
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 21px; height: 21px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .switch.on::after { transform: translateX(19px); }
+
+  /* ---------- Buttons / nav ---------- */
+  .nav-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .btn {
+    flex: 1;
+    padding: 15px 18px;
+    border-radius: var(--radius-control);
+    border: none;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 15.5px;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.1s, opacity 0.15s;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary {
+    background: var(--color-accent);
+    color: #fff;
+  }
+  .btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-ink-soft);
+    border: 1.5px solid var(--color-line);
+    flex: 0 0 auto;
+    width: 52px;
+  }
+  .btn-wide { flex: 1; }
+
+  .skip-link {
+    text-align: center;
+    font-size: 13px;
+    color: var(--color-ink-soft);
+    text-decoration: underline;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 12px;
+    padding: 4px;
+  }
+
+  /* ---------- Welcome screen ---------- */
+  .welcome-avatar {
+    width: 76px; height: 76px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2F8F8A, #0E4749);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .welcome-title { font-size: 27px; margin-bottom: 12px; }
+  .welcome-body { font-size: 15px; line-height: 1.6; color: var(--color-ink-soft); margin-bottom: 18px; }
+  .welcome-meta { font-size: 12.5px; color: var(--color-ink-soft); margin-top: auto; padding-top: 16px; text-align: center; }
+  .welcome-badges { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .welcome-badge {
+    font-size: 12px; font-weight: 600;
+    background: var(--color-primary-pale);
+    color: var(--color-primary);
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+
+  /* ---------- Summary ---------- */
+  .summary-section { margin-bottom: 16px; }
+  .summary-section h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-dark);
+    margin-bottom: 6px;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 700;
+  }
+  .summary-value { font-size: 15px; font-weight: 600; line-height: 1.5; }
+  .summary-divider { height: 1px; background: var(--color-line); margin: 16px 0; }
+
+  /* ---------- Thank you ---------- */
+  .thanks-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--color-primary-pale);
+    color: var(--color-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+    margin-bottom: 18px;
+  }
+
+  .error-text {
+    font-size: 13px;
+    color: var(--color-hibiscus);
+    margin-top: 8px;
+    display: none;
+  }
+  .error-text.show { display: block; }
+
+  @media (max-width: 360px) {
+    .question-title { font-size: 21px; }
+    .deck-stage { height: 260px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <div class="tide-wrap" id="tideWrap">
+    <div class="tide-track"><div class="tide-fill" id="tideFill"></div></div>
+    <div class="tide-label" id="tideLabel">Step 1 of 10</div>
+  </div>
+  <div class="card" id="card"></div>
+</div>
+
+<script>
+/* ============ CONFIG — edit these ============ */
+const CONFIG = {
+  agentName: "Peter Vanosdall",
+  agentInitials: "PV",
+  teamName: "Hawaii LUX Homes",
+  brokerage: "eXp Realty",
+  agentPhone: "(808) 219-07918000",
+  agentEmail: "peter@hawaiiluxhomes.com",
+  /* Paste your deployed Google Apps Script Web App URL here (see README.md) */
+  formEndpoint: "https://script.google.com/macros/s/AKfycbyQ4tlxNryHu7gK2Wp7odifa0n484wqAlTiPp_h3rQ9zXe5xkaRSxjyX5Hw-0niJzjjyw/exec"
+};
+
+/* URL param ?src=leasehold switches the welcome screen framing for
+   re-engaging leads who dropped off after learning about leasehold */
+const params = new URLSearchParams(window.location.search);
+const isLeaseholdReengagement = params.get('src') === 'leasehold';
+
+/* ============ STATE ============ */
+const state = {
+  moveStatus: null,
+  timeline: null,
+  vibes: [],
+  regions: [],
+  propTypes: [],
+  mustHaves: [],
+  beds: 3,
+  baths: 2,
+  budget: null,
+  leasehold: null,
+  name: "",
+  email: "",
+  phone: "",
+  emailMeCopy: false
+};
+
+const STEPS = ["welcome","move","timeline","vibe","region","proptype","musthaves","beds","budget","leasehold","contact","summary","thanks"];
+let stepIndex = 0;
+
+/* ============ DATA ============ */
+const MOVE_OPTIONS = [
+  { id: "on-island", label: "On Oahu now", ph: "ph-1" },
+  { id: "mainland", label: "Moving from the mainland", ph: "ph-2" },
+  { id: "military", label: "Military or moving for work", ph: "ph-3" },
+  { id: "browsing", label: "Just starting to look", ph: "ph-4" }
+];
+
+const TIMELINE_OPTIONS = [
+  { id: "asap", label: "ASAP", sub: "Ready to move within weeks" },
+  { id: "3-6", label: "3–6 months", sub: "Planning ahead" },
+  { id: "6-12", label: "6–12 months", sub: "Getting a head start" },
+  { id: "browsing", label: "Just browsing", sub: "No firm timeline yet" }
+];
+
+const VIBE_OPTIONS = [
+  { id: "beach", label: "Beach town", ph: "ph-1" },
+  { id: "suburban", label: "Quiet suburban", ph: "ph-5" },
+  { id: "urban", label: "Urban city life", ph: "ph-2" },
+  { id: "rural", label: "Rural and laid back", ph: "ph-6" },
+  { id: "no-pref", label: "Doesn't matter to me", ph: "ph-3" }
+];
+
+const REGION_OPTIONS = [
+  "Honolulu / Waikiki", "West Side / Kapolei / Ewa", "Central / Mililani",
+  "North Shore", "East Side / Kailua-Kaneohe", "Other Islands", "Unsure"
+];
+
+const PROPTYPE_OPTIONS = [
+  "Condo", "Townhouse", "Single-family home", "Investment / short-term-rental property"
+];
+
+const MUSTHAVE_OPTIONS = [
+  "Close to the beach", "In Waikiki", "Close to work or school", "Budget-conscious priority",
+  "Yard", "Move-in ready", "Fixer-upper OK", "ADU / ohana unit",
+  "Ocean views", "No HOA", "Condo amenities"
+];
+
+const BUDGET_OPTIONS = [
+  { id: "u700", label: "Under $700K" },
+  { id: "700-1m", label: "$700K – $1M" },
+  { id: "1m-1.5m", label: "$1M – $1.5M" },
+  { id: "1.5m-plus", label: "$1.5M+" },
+  { id: "unsure", label: "Not sure yet" }
+];
+
+/* ============ HELPERS ============ */
+function el(html) {
+  const t = document.createElement('template');
+  t.innerHTML = html.trim();
+  return t.content.firstElementChild;
+}
+function setCard(html) {
+  const card = document.getElementById('card');
+  card.innerHTML = html;
+  card.classList.remove('rise');
+  void card.offsetWidth;
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = '';
+}
+function updateTide() {
+  const wrap = document.getElementById('tideWrap');
+  const quizSteps = ["move","timeline","vibe","region","proptype","musthaves","beds","budget","leasehold","contact"];
+  const stepId = STEPS[stepIndex];
+  if (!quizSteps.includes(stepId)) { wrap.classList.remove('show'); return; }
+  wrap.classList.add('show');
+  const pos = quizSteps.indexOf(stepId) + 1;
+  const pct = Math.round((pos / quizSteps.length) * 100);
+  document.getElementById('tideFill').style.width = pct + '%';
+  document.getElementById('tideLabel').textContent = `Step ${pos} of ${quizSteps.length}`;
+}
+function goNext() { stepIndex++; render(); window.scrollTo(0,0); }
+function goBack() { stepIndex--; render(); window.scrollTo(0,0); }
+function toggleInArray(arr, val) {
+  const i = arr.indexOf(val);
+  if (i === -1) arr.push(val); else arr.splice(i, 1);
+}
+
+/* ============ RENDER DISPATCH ============ */
+function render() {
+  updateTide();
+  const stepId = STEPS[stepIndex];
+  const renderers = {
+    welcome: renderWelcome, move: renderMove, timeline: renderTimeline,
+    vibe: renderVibe, region: renderRegion, proptype: renderPropType,
+    musthaves: renderMustHaves, beds: renderBeds, budget: renderBudget,
+    leasehold: renderLeasehold, contact: renderContact, summary: renderSummary,
+    thanks: renderThanks
+  };
+  renderers[stepId]();
+}
+
+/* ---------- Welcome ---------- */
+function renderWelcome() {
+  const headline = isLeaseholdReengagement
+    ? "Let's see what else is out there"
+    : "Let's find your Oahu match";
+  const body = isLeaseholdReengagement
+    ? `Your search may have started with a leasehold property, but there's more than one way to get into a home here. Answer a few quick questions and I'll match you with options that fit, fee simple or otherwise.`
+    : `I'll ask a handful of quick questions about what you're looking for, no long forms. Takes about a minute, and I'll personally follow up with real matches, not a mailing list.`;
+
+  setCard(`
+    <div class="welcome-avatar">${CONFIG.agentInitials}</div>
+    <h1 class="welcome-title">${headline}</h1>
+    <p class="welcome-body">${body}</p>
+    <div class="welcome-badges">
+      <span class="welcome-badge">Takes about 60 seconds</span>
+      <span class="welcome-badge">No account needed</span>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-primary btn-wide" onclick="goNext()">Get started</button>
+    </div>
+    <div class="welcome-meta">${CONFIG.agentName} · ${CONFIG.teamName} of ${CONFIG.brokerage}</div>
+  `);
+}
+
+/* ---------- Move status ---------- */
+function renderMove() {
+  const cards = MOVE_OPTIONS.map(o => `
+    <button class="photo-option ${state.moveStatus===o.id?'selected':''}" onclick="selectMove('${o.id}')">
+      <div class="ph-bg ${o.ph}"></div>
+      <div class="ph-check">&#10003;</div>
+      <div class="ph-label">${o.label}</div>
+    </button>
+  `).join('');
+  setCard(`
+    <div class="eyebrow">Getting started</div>
+    <h2 class="question-title">Where are you at in your move?</h2>
+    <p class="question-sub">This helps me know how to prioritize following up with you.</p>
+    <div class="option-grid">${cards}</div>
+    ${navRow(state.moveStatus !== null)}
+  `);
+}
+function selectMove(id) { state.moveStatus = id; render(); }
+
+/* ---------- Timeline ---------- */
+function renderTimeline() {
+  const items = TIMELINE_OPTIONS.map(o => `
+    <button class="choice-btn ${state.timeline===o.id?'selected':''}" onclick="selectTimeline('${o.id}')">
+      <div><div>${o.label}</div><div class="choice-sub">${o.sub}</div></div>
+      <div class="radio-dot"></div>
+    </button>
+  `).join('');
+  setCard(`
+    <div class="eyebrow">Timing</div>
+    <h2 class="question-title">What's your timeline?</h2>
+    <p class="question-sub">No wrong answer, this just shapes what I send you.</p>
+    <div class="choice-list">${items}</div>
+    ${navRow(state.timeline !== null)}
+  `);
+}
+function selectTimeline(id) { state.timeline = id; render(); }
+
+/* ---------- Vibe swipe deck ---------- */
+let deckIndex = 0;
+function renderVibe() {
+  if (deckIndex >= VIBE_OPTIONS.length) deckIndex = 0;
+  const remaining = VIBE_OPTIONS.slice(deckIndex, deckIndex + 2).reverse();
+  const cardsHtml = remaining.map((o, i) => {
+    const isTop = i === remaining.length - 1;
+    return `<div class="deck-card ${o.ph}" data-id="${o.id}" style="z-index:${i}; transform: scale(${isTop?1:0.94}) translateY(${isTop?0:10}px);" ${isTop ? 'id="topDeckCard"' : ''}>
+      <div class="deck-tag" id="deckTag"></div>
+      <div class="deck-label">${o.label}</div>
+    </div>`;
+  }).join('');
+
+  const picksHtml = state.vibes.length
+    ? `<div class="deck-picks">${state.vibes.map(v => `<span class="deck-pick-tag">${VIBE_OPTIONS.find(o=>o.id===v).label}</span>`).join('')}</div>`
+    : '';
+
+  setCard(`
+    <div class="eyebrow">Neighborhood feel</div>
+    <h2 class="question-title">What's your vibe?</h2>
+    <p class="question-sub">Swipe or tap through, pick as many as feel right.</p>
+    <div class="deck-progress">${Math.min(deckIndex+1, VIBE_OPTIONS.length)} of ${VIBE_OPTIONS.length}</div>
+    <div class="deck-stage" id="deckStage">${cardsHtml}</div>
+    <div class="deck-actions">
+      <button class="deck-btn skip" onclick="deckAction(false)" aria-label="Skip">&#10005;</button>
+      <button class="deck-btn like" onclick="deckAction(true)" aria-label="Like">&#9825;</button>
+    </div>
+    ${picksHtml}
+    <div class="nav-row" style="margin-top:${state.vibes.length?'6px':'20px'}">
+      ${backBtn()}
+      <button class="btn btn-primary btn-wide" onclick="goNext()">${deckIndex < VIBE_OPTIONS.length ? "Skip rest, continue" : "Continue"}</button>
+    </div>
+  `);
+  attachDeckDrag();
+}
+function deckAction(liked) {
+  if (deckIndex >= VIBE_OPTIONS.length) return;
+  const opt = VIBE_OPTIONS[deckIndex];
+  if (liked) state.vibes.push(opt.id);
+  deckIndex++;
+  renderVibe();
+}
+function attachDeckDrag() {
+  const cardEl = document.getElementById('topDeckCard');
+  if (!cardEl) return;
+  let startX = 0, dx = 0, dragging = false;
+  const tag = document.getElementById('deckTag');
+  function onDown(x) { dragging = true; startX = x; cardEl.style.transition = 'none'; }
+  function onMove(x) {
+    if (!dragging) return;
+    dx = x - startX;
+    cardEl.style.transform = `translateX(${dx}px) rotate(${dx/18}deg)`;
+    if (tag) {
+      tag.className = 'deck-tag ' + (dx > 30 ? 'show-like' : dx < -30 ? 'show-skip' : '');
+      tag.textContent = dx > 30 ? 'Like' : dx < -30 ? 'Skip' : '';
+    }
+  }
+  function onUp() {
+    if (!dragging) return;
+    dragging = false;
+    cardEl.style.transition = '';
+    if (dx > 80) { deckAction(true); }
+    else if (dx < -80) { deckAction(false); }
+    else { cardEl.style.transform = ''; }
+    dx = 0;
+  }
+  cardEl.addEventListener('mousedown', e => onDown(e.clientX));
+  window.addEventListener('mousemove', e => onMove(e.clientX));
+  window.addEventListener('mouseup', onUp);
+  cardEl.addEventListener('touchstart', e => onDown(e.touches[0].clientX), {passive:true});
+  cardEl.addEventListener('touchmove', e => onMove(e.touches[0].clientX), {passive:true});
+  cardEl.addEventListener('touchend', onUp);
+}
+
+/* ---------- Region ---------- */
+function renderRegion() {
+  const chips = REGION_OPTIONS.map(r => `
+    <div class="chip ${state.regions.includes(r)?'selected':''}" onclick="toggleRegion('${r.replace(/'/g,"\\'")}')">${r}</div>
+  `).join('');
+  setCard(`
+    <div class="eyebrow">Location</div>
+    <h2 class="question-title">Where are you looking?</h2>
+    <p class="question-sub">Pick as many areas as you're considering.</p>
+    <div class="chip-grid">${chips}</div>
+    ${navRow(state.regions.length > 0)}
+  `);
+}
+function toggleRegion(r) { toggleInArray(state.regions, r); render(); }
+
+/* ---------- Property type ---------- */
+function renderPropType() {
+  const chips = PROPTYPE_OPTIONS.map(r => `
+    <div class="chip ${state.propTypes.includes(r)?'selected':''}" onclick="togglePropType('${r.replace(/'/g,"\\'")}')">${r}</div>
+  `).join('');
+  setCard(`
+    <div class="eyebrow">Property type</div>
+    <h2 class="question-title">What kind of place are you looking for?</h2>
+    <p class="question-sub">Select all that apply.</p>
+    <div class="chip-grid">${chips}</div>
+    ${navRow(state.propTypes.length > 0)}
+  `);
+}
+function togglePropType(r) { toggleInArray(state.propTypes, r); render(); }
+
+/* ---------- Must-haves ---------- */
+function renderMustHaves() {
+  const chips = MUSTHAVE_OPTIONS.map(r => `
+    <div class="chip ${state.mustHaves.includes(r)?'selected':''}" onclick="toggleMustHave('${r.replace(/'/g,"\\'")}')">${r}</div>
+  `).join('');
+  setCard(`
+    <div class="eyebrow">Must-haves</div>
+    <h2 class="question-title">Anything you can't live without?</h2>
+    <p class="question-sub">Optional, select as many as you'd like.</p>
+    <div class="chip-grid">${chips}</div>
+    ${navRow(true)}
+  `);
+}
+function toggleMustHave(r) { toggleInArray(state.mustHaves, r); render(); }
+
+/* ---------- Beds/baths ---------- */
+function renderBeds() {
+  setCard(`
+    <div class="eyebrow">Space</div>
+    <h2 class="question-title">Minimum beds and baths?</h2>
+    <p class="question-sub">Give me a floor, we can always go bigger.</p>
+    <div class="stepper-row">
+      <div class="stepper-label">Bedrooms</div>
+      <div class="stepper-controls">
+        <button class="stepper-btn" onclick="stepBeds(-1)">&minus;</button>
+        <div class="stepper-value">${state.beds}</div>
+        <button class="stepper-btn" onclick="stepBeds(1)">&plus;</button>
+      </div>
+    </div>
+    <div class="stepper-row">
+      <div class="stepper-label">Bathrooms</div>
+      <div class="stepper-controls">
+        <button class="stepper-btn" onclick="stepBaths(-1)">&minus;</button>
+        <div class="stepper-value">${state.baths}</div>
+        <button class="stepper-btn" onclick="stepBaths(1)">&plus;</button>
+      </div>
+    </div>
+    ${navRow(true)}
+  `);
+}
+function stepBeds(d) { state.beds = Math.max(1, Math.min(7, state.beds + d)); render(); }
+function stepBaths(d) { state.baths = Math.max(1, Math.min(7, state.baths + d)); render(); }
+
+/* ---------- Budget ---------- */
+function renderBudget() {
+  const items = BUDGET_OPTIONS.map(o => `
+    <button class="choice-btn ${state.budget===o.id?'selected':''}" onclick="selectBudget('${o.id}')">
+      <div>${o.label}</div>
+      <div class="radio-dot"></div>
+    </button>
+  `).join('');
+  setCard(`
+    <div class="eyebrow">Budget</div>
+    <h2 class="question-title">What's your realistic ceiling?</h2>
+    <p class="question-sub">This stays between us, it just helps me send you the right matches instead of wasting your time.</p>
+    <div class="choice-list">${items}</div>
+    ${navRow(state.budget !== null)}
+  `);
+}
+function selectBudget(id) { state.budget = id; render(); }
+
+/* ---------- Leasehold ---------- */
+function renderLeasehold() {
+  setCard(`
+    <div class="eyebrow">Ownership type</div>
+    <h2 class="question-title">Fee simple, or open to leasehold?</h2>
+    <p class="question-sub">A quick one that can open up more options than you'd expect.</p>
+    <div class="choice-list">
+      <button class="choice-btn ${state.leasehold==='fee-simple'?'selected':''}" onclick="selectLeasehold('fee-simple')">
+        <div><div>Fee simple only</div><div class="choice-sub">I own the land outright, no lease terms</div></div>
+        <div class="radio-dot"></div>
+      </button>
+      <button class="choice-btn ${state.leasehold==='open'?'selected':''}" onclick="selectLeasehold('open')">
+        <div><div>Open to leasehold</div><div class="choice-sub">Lower purchase price, want to hear the tradeoffs</div></div>
+        <div class="radio-dot"></div>
+      </button>
+      <button class="choice-btn ${state.leasehold==='unsure'?'selected':''}" onclick="selectLeasehold('unsure')">
+        <div><div>Not sure yet</div><div class="choice-sub">Tell me more before I decide</div></div>
+        <div class="radio-dot"></div>
+      </button>
+    </div>
+    <button class="info-toggle" onclick="toggleInfo()">
+      <span id="infoIcon">+</span> What's the difference?
+    </button>
+    <div class="info-panel" id="infoPanel">
+      With <strong>fee simple</strong>, you own the land and the home. With <strong>leasehold</strong>, someone else owns the land and you lease it, paying lease rent on top of your mortgage. The tradeoff: leasehold properties are almost always priced noticeably lower, which can put a location or a size of home within reach that fee simple wouldn't. Lease terms vary a lot property to property, some are quite favorable, so it's usually worth a real conversation before ruling it out.
+    </div>
+    ${navRow(state.leasehold !== null)}
+  `);
+}
+function selectLeasehold(id) { state.leasehold = id; render(); }
+function toggleInfo() {
+  const panel = document.getElementById('infoPanel');
+  const icon = document.getElementById('infoIcon');
+  panel.classList.toggle('show');
+  icon.textContent = panel.classList.contains('show') ? '−' : '+';
+}
+
+/* ---------- Contact ---------- */
+function renderContact() {
+  setCard(`
+    <div class="eyebrow">Almost there</div>
+    <h2 class="question-title">Save your results</h2>
+    <p class="question-sub">I'll use this to match you with real listings, no spam, ever.</p>
+    <div class="field">
+      <label for="fName">Name</label>
+      <input type="text" id="fName" value="${state.name}" placeholder="Your name" oninput="state.name=this.value; validateContact();">
+    </div>
+    <div class="field">
+      <label for="fEmail">Email</label>
+      <input type="email" id="fEmail" value="${state.email}" placeholder="you@email.com" oninput="state.email=this.value; validateContact();">
+    </div>
+    <div class="field">
+      <label for="fPhone">Phone <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+      <input type="tel" id="fPhone" value="${state.phone}" placeholder="(808) 000-0000" oninput="state.phone=this.value;">
+    </div>
+    <div class="error-text" id="contactError">Add your name and a valid email so I can send your matches.</div>
+    ${navRow(true, 'submitContact')}
+  `);
+}
+function validateContact() {}
+function submitContact() {
+  const err = document.getElementById('contactError');
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+  if (!state.name.trim() || !emailOk) {
+    err.classList.add('show');
+    return;
+  }
+  err.classList.remove('show');
+  goNext();
+}
+
+/* ---------- Summary ---------- */
+function labelFor(list, id) { const f = list.find(o => o.id === id); return f ? f.label : id; }
+function renderSummary() {
+  const vibesText = state.vibes.length ? state.vibes.map(v => labelFor(VIBE_OPTIONS, v)).join(', ') : 'No strong preference';
+  const budgetText = labelFor(BUDGET_OPTIONS, state.budget);
+  const leaseholdText = { 'fee-simple': 'Fee simple only', 'open': 'Open to leasehold', 'unsure': 'Not sure yet' }[state.leasehold];
+  const moveText = labelFor(MOVE_OPTIONS, state.moveStatus);
+  const timelineText = labelFor(TIMELINE_OPTIONS, state.timeline);
+
+  setCard(`
+    <div class="eyebrow">Your search profile</div>
+    <h2 class="question-title" style="margin-bottom:18px;">Here's what I've got</h2>
+
+    <div class="summary-section"><h3>Status</h3><div class="summary-value">${moveText} · ${timelineText}</div></div>
+    <div class="summary-section"><h3>Vibe</h3><div class="summary-value">${vibesText}</div></div>
+    <div class="summary-section"><h3>Where</h3><div class="summary-value">${state.regions.join(', ') || 'Unsure'}</div></div>
+    <div class="summary-section"><h3>Property type</h3><div class="summary-value">${state.propTypes.join(', ')}</div></div>
+    <div class="summary-section"><h3>Space</h3><div class="summary-value">${state.beds}+ bed, ${state.baths}+ bath</div></div>
+    <div class="summary-section"><h3>Budget</h3><div class="summary-value">${budgetText}</div></div>
+    <div class="summary-section"><h3>Ownership</h3><div class="summary-value">${leaseholdText}</div></div>
+    ${state.mustHaves.length ? `<div class="summary-section"><h3>Must-haves</h3><div class="summary-value">${state.mustHaves.join(', ')}</div></div>` : ''}
+
+    <div class="summary-divider"></div>
+
+    <div class="toggle-row" onclick="toggleEmailCopy()">
+      <div class="toggle-text">Send a copy of my results to my own inbox too</div>
+      <div class="switch ${state.emailMeCopy?'on':''}" id="emailSwitch"></div>
+    </div>
+
+    <div class="error-text" id="submitError">Something went wrong sending your info, please try again.</div>
+
+    <div class="nav-row">
+      ${backBtn()}
+      <button class="btn btn-primary btn-wide" id="submitBtn" onclick="submitAll()">Send my matches</button>
+    </div>
+  `);
+}
+function toggleEmailCopy() {
+  state.emailMeCopy = !state.emailMeCopy;
+  document.getElementById('emailSwitch').classList.toggle('on', state.emailMeCopy);
+}
+
+async function submitAll() {
+  const btn = document.getElementById('submitBtn');
+  const err = document.getElementById('submitError');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  err.classList.remove('show');
+
+  const payload = {
+    submittedAt: new Date().toISOString(),
+    source: isLeaseholdReengagement ? 'leasehold-reengagement' : 'general-intake',
+    name: state.name, email: state.email, phone: state.phone,
+    moveStatus: labelFor(MOVE_OPTIONS, state.moveStatus),
+    timeline: labelFor(TIMELINE_OPTIONS, state.timeline),
+    vibes: state.vibes.map(v => labelFor(VIBE_OPTIONS, v)).join(', '),
+    regions: state.regions.join(', '),
+    propertyTypes: state.propTypes.join(', '),
+    mustHaves: state.mustHaves.join(', '),
+    minBeds: state.beds, minBaths: state.baths,
+    budget: labelFor(BUDGET_OPTIONS, state.budget),
+    leasehold: { 'fee-simple': 'Fee simple only', 'open': 'Open to leasehold', 'unsure': 'Not sure yet' }[state.leasehold],
+    emailMeCopy: state.emailMeCopy
+  };
+
+  try {
+    if (CONFIG.formEndpoint && CONFIG.formEndpoint !== "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
+      await fetch(CONFIG.formEndpoint, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload)
+      });
+    } else {
+      console.warn('formEndpoint not configured, skipping submit. Payload:', payload);
+    }
+    goNext();
+  } catch (e) {
+    err.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = 'Send my matches';
+  }
+}
+
+/* ---------- Thanks ---------- */
+function renderThanks() {
+  setCard(`
+    <div class="thanks-icon">&#10003;</div>
+    <h1 class="welcome-title">You're all set</h1>
+    <p class="welcome-body">Thanks, ${state.name.split(' ')[0] || 'there'}! I've got your search profile and I'll be in touch soon with real matches, not automated listings.${state.emailMeCopy ? ' A copy is headed to your inbox too.' : ''}</p>
+    <p class="welcome-body">In the meantime, feel free to reach out anytime.</p>
+    <div class="welcome-meta">${CONFIG.agentName} · ${CONFIG.agentPhone} · ${CONFIG.agentEmail}</div>
+  `);
+}
+
+/* ---------- Nav helpers ---------- */
+function navRow(enabled, submitFn) {
+  const back = stepIndex > 1 ? backBtn() : '';
+  const action = submitFn ? `${submitFn}()` : 'goNext()';
+  return `<div class="nav-row">${back}<button class="btn btn-primary btn-wide" ${enabled?'':'disabled'} onclick="${action}">Continue</button></div>`;
+}
+function backBtn() { return `<button class="btn btn-ghost" onclick="goBack()">&#8592;</button>`; }
+
+render();
+</script>
+</body>
+</html>
