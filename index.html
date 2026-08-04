@@ -257,85 +257,123 @@
     color: #fff;
   }
 
-  /* ---------- Vibe swipe deck ---------- */
-  .deck-wrap { position: relative; }
-  .deck-stage {
+  /* ---------- Priorities grid (Instagram-style tap tiles) ---------- */
+  .priority-count {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 12px;
+  }
+  .vibe-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+  }
+  .vibe-tile {
     position: relative;
-    height: 300px;
-    margin-bottom: 16px;
-  }
-  .deck-card {
-    position: absolute;
-    inset: 0;
-    border-radius: 18px;
+    border: none;
+    border-radius: 10px;
     overflow: hidden;
-    display: flex;
-    align-items: flex-end;
-    padding: 18px;
-    cursor: grab;
-    user-select: none;
-    box-shadow: 0 14px 30px -14px rgba(14,71,73,0.4);
-    transition: transform 0.3s cubic-bezier(.2,.8,.2,1), opacity 0.3s;
-  }
-  .deck-card::after {
-    content: "";
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.6) 100%);
-  }
-  .deck-card .deck-label {
-    position: relative; z-index: 2;
-    color: #fff;
-    font-family: 'Fraunces', serif;
-    font-size: 21px;
-    font-weight: 500;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.35);
-  }
-  .deck-card .deck-tag {
-    position: absolute; top: 14px; left: 14px; z-index: 2;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 5px 10px; border-radius: 999px;
-    opacity: 0; transition: opacity 0.15s;
-  }
-  .deck-card .deck-tag.show-like { opacity: 1; background: rgba(30,140,110,0.9); color: #fff; }
-  .deck-card .deck-tag.show-skip { opacity: 1; background: rgba(200,70,70,0.9); color: #fff; }
-
-  .deck-actions {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    margin-bottom: 6px;
-  }
-  .deck-btn {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    border: 1.5px solid var(--color-line);
-    background: var(--color-surface);
-    font-size: 22px;
     cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
+    padding: 0;
+    aspect-ratio: 1 / 1;
     -webkit-tap-highlight-color: transparent;
   }
-  .deck-btn.skip { color: var(--color-hibiscus); }
-  .deck-btn.like { color: var(--color-primary); }
-  .deck-progress {
-    text-align: center;
-    font-size: 12.5px;
-    color: var(--color-ink-soft);
-    margin-bottom: 4px;
-  }
-  .deck-picks {
-    margin-top: 14px;
+  .vibe-tile .ph-bg {
+    position: absolute; inset: 0;
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 6px 4px;
+    text-align: center;
   }
-  .deck-pick-tag {
-    font-size: 12.5px; font-weight: 600;
-    background: var(--color-primary-pale);
+  .vibe-tile::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%);
+  }
+  .vibe-tile .vibe-label {
+    position: relative; z-index: 2;
+    color: #fff;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 700;
+    font-size: 10.5px;
+    line-height: 1.2;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+  }
+  .vibe-tile.selected {
+    outline: 3px solid var(--color-accent);
+    outline-offset: -3px;
+  }
+  .vibe-tile .vibe-check {
+    position: absolute; top: 5px; right: 5px; z-index: 3;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--color-accent);
+    color: #fff; font-size: 11px; font-weight: 700;
+    align-items: center; justify-content: center;
+    display: none;
+  }
+  .vibe-tile.selected .vibe-check { display: flex; }
+
+  /* ---------- Oahu region map ---------- */
+  .map-wrap { margin: 0 -22px 14px; }
+  .oahu-map { width: 100%; height: auto; display: block; }
+  .map-region { cursor: pointer; }
+  .map-region-fill { transition: fill 0.15s; }
+  .map-region-label { pointer-events: none; user-select: none; }
+  .map-extra-chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 4px; }
+
+  /* ---------- Budget slider ---------- */
+  .budget-value-display {
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 600;
     color: var(--color-primary);
-    padding: 6px 12px;
+    margin-bottom: 16px;
+  }
+  .budget-value-display.placeholder {
+    color: var(--color-ink-soft);
+    font-family: 'Public Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .budget-slider-wrap { margin-bottom: 18px; }
+  input[type="range"].budget-slider {
+    width: 100%;
+    height: 6px;
     border-radius: 999px;
+    background: var(--color-line);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    margin: 0;
+  }
+  input[type="range"].budget-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(14,71,73,0.4);
+    cursor: pointer;
+  }
+  input[type="range"].budget-slider::-moz-range-thumb {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(14,71,73,0.4);
+    cursor: pointer;
+  }
+  input[type="range"].budget-slider.dimmed { opacity: 0.35; }
+  .budget-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    margin-top: 8px;
   }
 
   /* ---------- Steppers (beds/baths) ---------- */
@@ -561,7 +599,7 @@
 
   @media (max-width: 360px) {
     .question-title { font-size: 21px; }
-    .deck-stage { height: 260px; }
+    .vibe-tile .vibe-label { font-size: 9.5px; }
   }
 </style>
 </head>
@@ -582,10 +620,10 @@ const CONFIG = {
   agentInitials: "PV",
   teamName: "Hawaii LUX Homes",
   brokerage: "eXp Realty",
-  agentPhone: "(808) 219-07918000",
+  agentPhone: "(808) 000-0000",
   agentEmail: "peter@hawaiiluxhomes.com",
   /* Paste your deployed Google Apps Script Web App URL here (see README.md) */
-  formEndpoint: "https://script.google.com/macros/s/AKfycbyQ4tlxNryHu7gK2Wp7odifa0n484wqAlTiPp_h3rQ9zXe5xkaRSxjyX5Hw-0niJzjjyw/exec"
+  formEndpoint: "PASTE_YOUR_APPS_SCRIPT_URL_HERE"
 };
 
 /* URL param ?src=leasehold switches the welcome screen framing for
@@ -603,7 +641,8 @@ const state = {
   mustHaves: [],
   beds: 3,
   baths: 2,
-  budget: null,
+  budgetValue: null,
+  budgetMode: null,
   leasehold: null,
   name: "",
   email: "",
@@ -630,34 +669,57 @@ const TIMELINE_OPTIONS = [
 ];
 
 const VIBE_OPTIONS = [
-  { id: "beach", label: "Beach town", ph: "ph-1" },
-  { id: "suburban", label: "Quiet suburban", ph: "ph-5" },
-  { id: "urban", label: "Urban city life", ph: "ph-2" },
-  { id: "rural", label: "Rural and laid back", ph: "ph-6" },
-  { id: "no-pref", label: "Doesn't matter to me", ph: "ph-3" }
+  { id: "beach-close", label: "Close to the Beach", ph: "ph-1" },
+  { id: "waikiki", label: "In Waikiki", ph: "ph-2" },
+  { id: "schools", label: "Close to Good Schools", ph: "ph-3" },
+  { id: "commute", label: "Commute Time to Work", ph: "ph-4" },
+  { id: "military", label: "Close to Military Base", ph: "ph-5" },
+  { id: "rural", label: "Quiet Rural Living", ph: "ph-6" },
+  { id: "value", label: "Most Home for Lowest Price", ph: "ph-2" },
+  { id: "food-shopping", label: "Close to Food/Shopping", ph: "ph-3" },
+  { id: "specific-location", label: "Want Specific Location", ph: "ph-4" },
+  { id: "no-location-pref", label: "No Location Preferences", ph: "ph-5" },
+  { id: "mountain-views", label: "Mountain Views", ph: "ph-6" },
+  { id: "ocean-views", label: "Ocean Views", ph: "ph-1" },
+  { id: "single-family", label: "Single Family Home", ph: "ph-3" },
+  { id: "condo-townhouse", label: "Condo/Townhouse", ph: "ph-4" },
+  { id: "pool", label: "Pool", ph: "ph-5" },
+  { id: "adu", label: "ADU/Attached Ohana", ph: "ph-6" },
+  { id: "str", label: "Short Term Rental", ph: "ph-2" }
 ];
 
-const REGION_OPTIONS = [
-  "Honolulu / Waikiki", "West Side / Kapolei / Ewa", "Central / Mililani",
-  "North Shore", "East Side / Kailua-Kaneohe", "Other Islands", "Unsure"
+/* Oahu region map — traced from the reference map you provided.
+   Coordinates are in the source image's own pixel space (505x396). */
+const REGION_ZONES = [
+  { id: "north-shore", label: "North Shore (Haleiwa)", title: "North Shore", towns: ["Haleiwa"],
+    cx: 201, cy: 108,
+    d: "M246,48 L226,48 L209,57 L184,82 L182,93 L156,117 L156,124 L148,133 L121,136 L121,142 L144,175 L152,175 L181,153 L273,95 L273,89 L262,69 Z" },
+  { id: "west-oahu", label: "West Oahu (Kapolei/Ewa)", title: "West Oahu", towns: ["Kapolei", "Ewa"],
+    cx: 143, cy: 236,
+    d: "M53,138 L55,147 L74,167 L74,206 L97,224 L109,259 L131,276 L152,331 L238,318 L239,304 L212,290 L212,266 L204,265 L162,200 L154,195 L154,172 L141,172 L116,136 Z" },
+  { id: "central-oahu", label: "Central Oahu (Mililani/Pearl City/Aiea)", title: "Central Oahu", towns: ["Mililani", "Pearl City", "Aiea"],
+    cx: 244, cy: 232,
+    d: "M152,179 L165,208 L209,267 L209,289 L236,297 L236,319 L346,294 L346,286 L335,269 L322,258 L227,133 L219,134 Z" },
+  { id: "windward", label: "Windward (Kailua/Kaneohe)", title: "Windward", towns: ["Kailua", "Kaneohe"],
+    cx: 355, cy: 250,
+    d: "M234,124 L230,135 L392,343 L409,343 L410,357 L418,357 L448,331 L448,322 L417,303 L408,264 L393,257 L399,219 L372,219 L367,225 L328,219 L324,152 L304,147 L277,101 L268,101 Z" },
+  { id: "honolulu", label: "Honolulu (Waikiki)", title: "Honolulu", towns: ["Waikiki"],
+    cx: 332, cy: 327,
+    d: "M389,346 L387,336 L353,295 L329,300 L323,304 L310,304 L270,316 L254,317 L256,328 L279,328 L284,332 L303,333 L313,340 L318,340 L324,347 L335,348 L340,361 L362,361 L372,351 Z" }
 ];
+const REGION_OUTLINE_D = "M53,138 L74,167 L74,206 L97,224 L109,259 L131,276 L152,331 L253,319 L256,328 L308,335 L349,362 L390,343 L409,343 L410,357 L418,357 L448,331 L448,322 L417,303 L408,264 L393,257 L399,219 L345,225 L327,218 L324,152 L304,147 L243,46 L209,57 L148,133 Z";
+const REGION_VIEWBOX = "0 0 505 396";
+const REGION_EXTRA_OPTIONS = ["Unsure", "Open to other islands"];
 
 const PROPTYPE_OPTIONS = [
   "Condo", "Townhouse", "Single-family home", "Investment / short-term-rental property"
 ];
 
 const MUSTHAVE_OPTIONS = [
-  "Close to the beach", "In Waikiki", "Close to work or school", "Budget-conscious priority",
-  "Yard", "Move-in ready", "Fixer-upper OK", "ADU / ohana unit",
-  "Ocean views", "No HOA", "Condo amenities"
-];
-
-const BUDGET_OPTIONS = [
-  { id: "u700", label: "Under $700K" },
-  { id: "700-1m", label: "$700K – $1M" },
-  { id: "1m-1.5m", label: "$1M – $1.5M" },
-  { id: "1.5m-plus", label: "$1.5M+" },
-  { id: "unsure", label: "Not sure yet" }
+  "Walking distance to beach", "In Waikiki", "Close to specific school", "Yard",
+  "Move-in ready", "Fixer-upper", "AC", "Recently renovated / updated",
+  "No HOA", "Low HOA", "Condo amenities", "Parking",
+  "Pet friendly", "First floor bedroom", "No stairs", "ADU / ohana", "Solar / PV"
 ];
 
 /* ============ HELPERS ============ */
@@ -713,8 +775,8 @@ function renderWelcome() {
     ? "Let's see what else is out there"
     : "Let's find your Oahu match";
   const body = isLeaseholdReengagement
-    ? `Your search may have started with a leasehold property, but there's more than one way to get into a home here. Answer a few quick questions and I'll match you with options that fit, fee simple or otherwise.`
-    : `I'll ask a handful of quick questions about what you're looking for, no long forms. Takes about a minute, and I'll personally follow up with real matches, not a mailing list.`;
+    ? `Your search may have started with a leasehold property, but there's more than one way to get into a home here. This quick matching quiz gathers what you're really looking for, budget, must-haves, target neighborhoods, so I can send you personalized options that fit, fee simple or otherwise.`
+    : `This is a quick matching quiz, not a form. Answer a few questions about your budget, must-haves, and target neighborhoods, and I'll use it to send you real, personalized property options instead of a generic listings blast.`;
 
   setCard(`
     <div class="welcome-avatar">${CONFIG.agentInitials}</div>
@@ -725,7 +787,7 @@ function renderWelcome() {
       <span class="welcome-badge">No account needed</span>
     </div>
     <div class="nav-row">
-      <button class="btn btn-primary btn-wide" onclick="goNext()">Get started</button>
+      <button class="btn btn-primary btn-wide" onclick="goNext()">Start the quiz</button>
     </div>
     <div class="welcome-meta">${CONFIG.agentName} · ${CONFIG.teamName} of ${CONFIG.brokerage}</div>
   `);
@@ -743,7 +805,7 @@ function renderMove() {
   setCard(`
     <div class="eyebrow">Getting started</div>
     <h2 class="question-title">Where are you at in your move?</h2>
-    <p class="question-sub">This helps me know how to prioritize following up with you.</p>
+    <p class="question-sub">I offer virtual showings for those still on the mainland.</p>
     <div class="option-grid">${cards}</div>
     ${navRow(state.moveStatus !== null)}
   `);
@@ -768,90 +830,65 @@ function renderTimeline() {
 }
 function selectTimeline(id) { state.timeline = id; render(); }
 
-/* ---------- Vibe swipe deck ---------- */
-let deckIndex = 0;
+/* ---------- Priorities tile grid ---------- */
 function renderVibe() {
-  if (deckIndex >= VIBE_OPTIONS.length) deckIndex = 0;
-  const remaining = VIBE_OPTIONS.slice(deckIndex, deckIndex + 2).reverse();
-  const cardsHtml = remaining.map((o, i) => {
-    const isTop = i === remaining.length - 1;
-    return `<div class="deck-card ${o.ph}" data-id="${o.id}" style="z-index:${i}; transform: scale(${isTop?1:0.94}) translateY(${isTop?0:10}px);" ${isTop ? 'id="topDeckCard"' : ''}>
-      <div class="deck-tag" id="deckTag"></div>
-      <div class="deck-label">${o.label}</div>
-    </div>`;
+  const tiles = VIBE_OPTIONS.map(o => {
+    const selected = state.vibes.includes(o.id);
+    return `
+    <button class="vibe-tile ${selected?'selected':''}" onclick="toggleVibe('${o.id}')">
+      <div class="ph-bg ${o.ph}"><div class="vibe-label">${o.label}</div></div>
+      <div class="vibe-check">&#10003;</div>
+    </button>`;
   }).join('');
 
-  const picksHtml = state.vibes.length
-    ? `<div class="deck-picks">${state.vibes.map(v => `<span class="deck-pick-tag">${VIBE_OPTIONS.find(o=>o.id===v).label}</span>`).join('')}</div>`
-    : '';
-
   setCard(`
-    <div class="eyebrow">Neighborhood feel</div>
-    <h2 class="question-title">What's your vibe?</h2>
-    <p class="question-sub">Swipe or tap through, pick as many as feel right.</p>
-    <div class="deck-progress">${Math.min(deckIndex+1, VIBE_OPTIONS.length)} of ${VIBE_OPTIONS.length}</div>
-    <div class="deck-stage" id="deckStage">${cardsHtml}</div>
-    <div class="deck-actions">
-      <button class="deck-btn skip" onclick="deckAction(false)" aria-label="Skip">&#10005;</button>
-      <button class="deck-btn like" onclick="deckAction(true)" aria-label="Like">&#9825;</button>
-    </div>
-    ${picksHtml}
-    <div class="nav-row" style="margin-top:${state.vibes.length?'6px':'20px'}">
-      ${backBtn()}
-      <button class="btn btn-primary btn-wide" onclick="goNext()">${deckIndex < VIBE_OPTIONS.length ? "Skip rest, continue" : "Continue"}</button>
-    </div>
+    <div class="eyebrow">Priorities</div>
+    <h2 class="question-title">What matters most?</h2>
+    <p class="question-sub">Tap to select, tap again to remove. Pick as many as you'd like, but try narrowing to your top 3&ndash;5.</p>
+    <div class="priority-count">${state.vibes.length} selected</div>
+    <div class="vibe-grid">${tiles}</div>
+    ${navRow(true)}
   `);
-  attachDeckDrag();
 }
-function deckAction(liked) {
-  if (deckIndex >= VIBE_OPTIONS.length) return;
-  const opt = VIBE_OPTIONS[deckIndex];
-  if (liked) state.vibes.push(opt.id);
-  deckIndex++;
-  renderVibe();
-}
-function attachDeckDrag() {
-  const cardEl = document.getElementById('topDeckCard');
-  if (!cardEl) return;
-  let startX = 0, dx = 0, dragging = false;
-  const tag = document.getElementById('deckTag');
-  function onDown(x) { dragging = true; startX = x; cardEl.style.transition = 'none'; }
-  function onMove(x) {
-    if (!dragging) return;
-    dx = x - startX;
-    cardEl.style.transform = `translateX(${dx}px) rotate(${dx/18}deg)`;
-    if (tag) {
-      tag.className = 'deck-tag ' + (dx > 30 ? 'show-like' : dx < -30 ? 'show-skip' : '');
-      tag.textContent = dx > 30 ? 'Like' : dx < -30 ? 'Skip' : '';
-    }
-  }
-  function onUp() {
-    if (!dragging) return;
-    dragging = false;
-    cardEl.style.transition = '';
-    if (dx > 80) { deckAction(true); }
-    else if (dx < -80) { deckAction(false); }
-    else { cardEl.style.transform = ''; }
-    dx = 0;
-  }
-  cardEl.addEventListener('mousedown', e => onDown(e.clientX));
-  window.addEventListener('mousemove', e => onMove(e.clientX));
-  window.addEventListener('mouseup', onUp);
-  cardEl.addEventListener('touchstart', e => onDown(e.touches[0].clientX), {passive:true});
-  cardEl.addEventListener('touchmove', e => onMove(e.touches[0].clientX), {passive:true});
-  cardEl.addEventListener('touchend', onUp);
-}
+function toggleVibe(id) { toggleInArray(state.vibes, id); render(); }
 
-/* ---------- Region ---------- */
+/* ---------- Region (Oahu map) ---------- */
+function regionLabelTspans(zone, textFill) {
+  const lines = [{ t: zone.title, size: 12, weight: 700 }]
+    .concat(zone.towns.map(t => ({ t, size: 9, weight: 600 })));
+  const lineGap = 12;
+  const startY = zone.cy - ((lines.length - 1) * lineGap) / 2 + 4;
+  return lines.map((l, i) =>
+    `<tspan x="${zone.cx}" y="${startY + i * lineGap}" font-size="${l.size}" font-weight="${l.weight}" fill="${textFill}">${l.t}</tspan>`
+  ).join('');
+}
 function renderRegion() {
-  const chips = REGION_OPTIONS.map(r => `
+  const zoneShapes = REGION_ZONES.map(z => {
+    const selected = state.regions.includes(z.label);
+    const fill = selected ? 'var(--color-primary)' : 'var(--color-primary-pale)';
+    const textFill = selected ? '#ffffff' : 'var(--color-primary)';
+    return `
+    <g class="map-region" onclick="toggleRegion('${z.label.replace(/'/g,"\\'")}')">
+      <path class="map-region-fill" d="${z.d}" fill="${fill}" stroke="var(--color-bg)" stroke-width="2.5" stroke-linejoin="round" />
+      <text class="map-region-label" text-anchor="middle" font-family="Public Sans, sans-serif">${regionLabelTspans(z, textFill)}</text>
+    </g>`;
+  }).join('');
+
+  const extraChips = REGION_EXTRA_OPTIONS.map(r => `
     <div class="chip ${state.regions.includes(r)?'selected':''}" onclick="toggleRegion('${r.replace(/'/g,"\\'")}')">${r}</div>
   `).join('');
+
   setCard(`
     <div class="eyebrow">Location</div>
     <h2 class="question-title">Where are you looking?</h2>
-    <p class="question-sub">Pick as many areas as you're considering.</p>
-    <div class="chip-grid">${chips}</div>
+    <p class="question-sub">Tap the areas on the map you're considering, select as many as you'd like.</p>
+    <div class="map-wrap">
+      <svg class="oahu-map" viewBox="${REGION_VIEWBOX}" role="img" aria-label="Map of Oahu regions, tap to select">
+        ${zoneShapes}
+        <path d="${REGION_OUTLINE_D}" fill="none" stroke="var(--color-primary)" stroke-width="2.5" stroke-linejoin="round" />
+      </svg>
+    </div>
+    <div class="map-extra-chips">${extraChips}</div>
     ${navRow(state.regions.length > 0)}
   `);
 }
@@ -892,7 +929,7 @@ function renderBeds() {
   setCard(`
     <div class="eyebrow">Space</div>
     <h2 class="question-title">Minimum beds and baths?</h2>
-    <p class="question-sub">Give me a floor, we can always go bigger.</p>
+    <p class="question-sub">Choose the minimum number of beds and baths you can live with, we can always include bigger later.</p>
     <div class="stepper-row">
       <div class="stepper-label">Bedrooms</div>
       <div class="stepper-controls">
@@ -916,22 +953,53 @@ function stepBeds(d) { state.beds = Math.max(1, Math.min(7, state.beds + d)); re
 function stepBaths(d) { state.baths = Math.max(1, Math.min(7, state.baths + d)); render(); }
 
 /* ---------- Budget ---------- */
+const BUDGET_MIN = 250000;
+const BUDGET_MAX = 3000000;
+function formatBudgetLabel(v) {
+  v = Number(v);
+  if (v >= BUDGET_MAX) return "$3M+";
+  if (v < 1000000) return "$" + Math.round(v / 1000) + "K";
+  const m = Math.round((v / 1000000) * 100) / 100;
+  return "$" + (m % 1 === 0 ? m.toFixed(0) : String(m)) + "M";
+}
+function budgetSummaryText() {
+  if (state.budgetMode === 'unsure') return "Not sure yet, wants to talk to a lender";
+  if (state.budgetMode === 'slider') return "Up to " + formatBudgetLabel(state.budgetValue);
+  return "Not answered";
+}
 function renderBudget() {
-  const items = BUDGET_OPTIONS.map(o => `
-    <button class="choice-btn ${state.budget===o.id?'selected':''}" onclick="selectBudget('${o.id}')">
-      <div>${o.label}</div>
-      <div class="radio-dot"></div>
-    </button>
-  `).join('');
+  const isSlider = state.budgetMode === 'slider';
+  const isUnsure = state.budgetMode === 'unsure';
+  const sliderVal = state.budgetValue || 1250000;
+  const displayHtml = isSlider
+    ? `<div class="budget-value-display">Up to ${formatBudgetLabel(sliderVal)}</div>`
+    : `<div class="budget-value-display placeholder">Drag to set your budget</div>`;
+
   setCard(`
     <div class="eyebrow">Budget</div>
     <h2 class="question-title">What's your realistic ceiling?</h2>
     <p class="question-sub">This stays between us, it just helps me send you the right matches instead of wasting your time.</p>
-    <div class="choice-list">${items}</div>
-    ${navRow(state.budget !== null)}
+    ${displayHtml}
+    <div class="budget-slider-wrap">
+      <input type="range" class="budget-slider ${isUnsure?'dimmed':''}" min="${BUDGET_MIN}" max="${BUDGET_MAX}" step="250000" value="${sliderVal}" oninput="onBudgetSlide(this.value)">
+      <div class="budget-ticks"><span>$250K</span><span>$3M+</span></div>
+    </div>
+    <button class="choice-btn ${isUnsure?'selected':''}" onclick="selectBudgetUnsure()">
+      <div>Not sure yet / want to talk to a lender</div>
+      <div class="radio-dot"></div>
+    </button>
+    ${navRow(isSlider || isUnsure)}
   `);
 }
-function selectBudget(id) { state.budget = id; render(); }
+function onBudgetSlide(v) {
+  state.budgetValue = parseInt(v, 10);
+  state.budgetMode = 'slider';
+  render();
+}
+function selectBudgetUnsure() {
+  state.budgetMode = 'unsure';
+  render();
+}
 
 /* ---------- Leasehold ---------- */
 function renderLeasehold() {
@@ -1008,7 +1076,7 @@ function submitContact() {
 function labelFor(list, id) { const f = list.find(o => o.id === id); return f ? f.label : id; }
 function renderSummary() {
   const vibesText = state.vibes.length ? state.vibes.map(v => labelFor(VIBE_OPTIONS, v)).join(', ') : 'No strong preference';
-  const budgetText = labelFor(BUDGET_OPTIONS, state.budget);
+  const budgetText = budgetSummaryText();
   const leaseholdText = { 'fee-simple': 'Fee simple only', 'open': 'Open to leasehold', 'unsure': 'Not sure yet' }[state.leasehold];
   const moveText = labelFor(MOVE_OPTIONS, state.moveStatus);
   const timelineText = labelFor(TIMELINE_OPTIONS, state.timeline);
@@ -1018,7 +1086,7 @@ function renderSummary() {
     <h2 class="question-title" style="margin-bottom:18px;">Here's what I've got</h2>
 
     <div class="summary-section"><h3>Status</h3><div class="summary-value">${moveText} · ${timelineText}</div></div>
-    <div class="summary-section"><h3>Vibe</h3><div class="summary-value">${vibesText}</div></div>
+    <div class="summary-section"><h3>Priorities</h3><div class="summary-value">${vibesText}</div></div>
     <div class="summary-section"><h3>Where</h3><div class="summary-value">${state.regions.join(', ') || 'Unsure'}</div></div>
     <div class="summary-section"><h3>Property type</h3><div class="summary-value">${state.propTypes.join(', ')}</div></div>
     <div class="summary-section"><h3>Space</h3><div class="summary-value">${state.beds}+ bed, ${state.baths}+ bath</div></div>
@@ -1064,7 +1132,7 @@ async function submitAll() {
     propertyTypes: state.propTypes.join(', '),
     mustHaves: state.mustHaves.join(', '),
     minBeds: state.beds, minBaths: state.baths,
-    budget: labelFor(BUDGET_OPTIONS, state.budget),
+    budget: budgetSummaryText(),
     leasehold: { 'fee-simple': 'Fee simple only', 'open': 'Open to leasehold', 'unsure': 'Not sure yet' }[state.leasehold],
     emailMeCopy: state.emailMeCopy
   };
