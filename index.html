@@ -152,22 +152,26 @@
     cursor: pointer;
     padding: 0;
     aspect-ratio: 1 / 0.95;
-    text-align: left;
+    text-align: center;
     -webkit-tap-highlight-color: transparent;
   }
   .photo-option .ph-bg {
     position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
     display: flex;
     align-items: flex-end;
-    padding: 12px;
+    justify-content: center;
+    padding: 0 10px 14px;
+    text-align: center;
   }
   .photo-option .ph-label {
     color: #fff;
     font-family: 'Fraunces', serif;
     font-weight: 500;
     font-size: 15px;
-    line-height: 1.2;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+    line-height: 1.25;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.45);
   }
   .photo-option::after {
     content: "";
@@ -655,10 +659,10 @@ let stepIndex = 0;
 
 /* ============ DATA ============ */
 const MOVE_OPTIONS = [
-  { id: "on-island", label: "On Oahu now", ph: "ph-1" },
-  { id: "mainland", label: "Moving from the mainland", ph: "ph-2" },
-  { id: "military", label: "Military or moving for work", ph: "ph-3" },
-  { id: "browsing", label: "Just starting to look", ph: "ph-4" }
+  { id: "on-island", label: "On Oahu now", img: "images/move-on-island.jpg" },
+  { id: "mainland", label: "Moving from the mainland", img: "images/move-mainland.jpg" },
+  { id: "military", label: "Military or moving for work", img: "images/move-military.jpg" },
+  { id: "browsing", label: "Just starting to look", img: "images/move-browsing.jpg" }
 ];
 
 const TIMELINE_OPTIONS = [
@@ -670,21 +674,31 @@ const TIMELINE_OPTIONS = [
 
 const VIBE_OPTIONS = [
   { id: "beach-close", label: "Close to the Beach", ph: "ph-1" },
-  { id: "waikiki", label: "In Waikiki", ph: "ph-2" },
-  { id: "schools", label: "Close to Good Schools", ph: "ph-3" },
-  { id: "commute", label: "Commute Time to Work", ph: "ph-4" },
+  { id: "surfing", label: "Close to Surfing", ph: "ph-2" },
+  { id: "quiet-neighborhood", label: "Quiet Neighborhood", ph: "ph-3" },
+  { id: "good-schools", label: "Good Schools", ph: "ph-4" },
+  { id: "short-commute", label: "Short Commute", ph: "ph-5" },
+  { id: "city-center", label: "City Center/Downtown", ph: "ph-6" },
+  { id: "close-shopping", label: "Close to Shopping", ph: "ph-2" },
+  { id: "close-restaurants", label: "Close to Restaurants", ph: "ph-3" },
+  { id: "close-work", label: "Close to Work", ph: "ph-4" },
   { id: "military", label: "Close to Military Base", ph: "ph-5" },
-  { id: "rural", label: "Quiet Rural Living", ph: "ph-6" },
-  { id: "value", label: "Most Home for Lowest Price", ph: "ph-2" },
-  { id: "food-shopping", label: "Close to Food/Shopping", ph: "ph-3" },
-  { id: "specific-location", label: "Want Specific Location", ph: "ph-4" },
-  { id: "no-location-pref", label: "No Location Preferences", ph: "ph-5" },
-  { id: "mountain-views", label: "Mountain Views", ph: "ph-6" },
   { id: "ocean-views", label: "Ocean Views", ph: "ph-1" },
-  { id: "single-family", label: "Single Family Home", ph: "ph-3" },
-  { id: "condo-townhouse", label: "Condo/Townhouse", ph: "ph-4" },
-  { id: "pool", label: "Pool", ph: "ph-5" },
-  { id: "adu", label: "ADU/Attached Ohana", ph: "ph-6" },
+  { id: "mountain-views", label: "Mountain Views", ph: "ph-6" },
+  { id: "privacy", label: "Privacy", ph: "ph-3" },
+  { id: "large-lot", label: "Large Lot/Green Space", ph: "ph-5" },
+  { id: "low-maintenance", label: "Low Maintenance", ph: "ph-2" },
+  { id: "investment", label: "Investment Potential", ph: "ph-4" },
+  { id: "rental-potential", label: "Rental Potential", ph: "ph-6" },
+  { id: "specific-neighborhood", label: "Specific Neighborhood", ph: "ph-1" },
+  { id: "newer-community", label: "Newer Community", ph: "ph-3" },
+  { id: "gated-community", label: "Gated Community", ph: "ph-5" },
+  { id: "outdoor-lifestyle", label: "Outdoor Lifestyle", ph: "ph-2" },
+  { id: "nightlife", label: "Nightlife Nearby", ph: "ph-4" },
+  { id: "freeway-access", label: "Easy Freeway Access", ph: "ph-6" },
+  { id: "no-hoa", label: "No HOA", ph: "ph-1" },
+  { id: "low-hoa", label: "Low HOA Fees", ph: "ph-3" },
+  { id: "adu", label: "ADU/Ohana Unit", ph: "ph-5" },
   { id: "str", label: "Short Term Rental", ph: "ph-2" }
 ];
 
@@ -692,13 +706,13 @@ const VIBE_OPTIONS = [
    Coordinates are in the source image's own pixel space (505x396). */
 const REGION_ZONES = [
   { id: "north-shore", label: "North Shore (Haleiwa)", title: "North Shore", towns: ["Haleiwa"],
-    cx: 201, cy: 108,
+    cx: 228, cy: 92,
     d: "M246,48 L226,48 L209,57 L184,82 L182,93 L156,117 L156,124 L148,133 L121,136 L121,142 L144,175 L152,175 L181,153 L273,95 L273,89 L262,69 Z" },
   { id: "west-oahu", label: "West Oahu (Kapolei/Ewa)", title: "West Oahu", towns: ["Kapolei", "Ewa"],
-    cx: 143, cy: 236,
+    cx: 118, cy: 190,
     d: "M53,138 L55,147 L74,167 L74,206 L97,224 L109,259 L131,276 L152,331 L238,318 L239,304 L212,290 L212,266 L204,265 L162,200 L154,195 L154,172 L141,172 L116,136 Z" },
   { id: "central-oahu", label: "Central Oahu (Mililani/Pearl City/Aiea)", title: "Central Oahu", towns: ["Mililani", "Pearl City", "Aiea"],
-    cx: 244, cy: 232,
+    cx: 220, cy: 205,
     d: "M152,179 L165,208 L209,267 L209,289 L236,297 L236,319 L346,294 L346,286 L335,269 L322,258 L227,133 L219,134 Z" },
   { id: "windward", label: "Windward (Kailua/Kaneohe)", title: "Windward", towns: ["Kailua", "Kaneohe"],
     cx: 355, cy: 250,
@@ -716,10 +730,13 @@ const PROPTYPE_OPTIONS = [
 ];
 
 const MUSTHAVE_OPTIONS = [
-  "Walking distance to beach", "In Waikiki", "Close to specific school", "Yard",
-  "Move-in ready", "Fixer-upper", "AC", "Recently renovated / updated",
-  "No HOA", "Low HOA", "Condo amenities", "Parking",
-  "Pet friendly", "First floor bedroom", "No stairs", "ADU / ohana", "Solar / PV"
+  "Air Conditioning", "Ocean View", "Mountain View", "Pool",
+  "Garage", "Covered Parking", "Multiple Parking Stalls", "Large Yard",
+  "Fenced Yard", "Pet Friendly", "Lanai", "Newly Renovated",
+  "Move-in Ready", "Fixer Upper", "Open Floor Plan", "Home Office",
+  "Solar Panels (PV)", "Condo Amenities", "Fitness Center", "Gated Community",
+  "Security", "Elevator", "In-unit Laundry", "Walk-in Closet",
+  "Modern Kitchen", "Stainless Steel Appliances", "Low HOA Fees", "No HOA Fees"
 ];
 
 /* ============ HELPERS ============ */
@@ -797,9 +814,10 @@ function renderWelcome() {
 function renderMove() {
   const cards = MOVE_OPTIONS.map(o => `
     <button class="photo-option ${state.moveStatus===o.id?'selected':''}" onclick="selectMove('${o.id}')">
-      <div class="ph-bg ${o.ph}"></div>
+      <div class="ph-bg" style="background-image:url('${o.img}')">
+        <div class="ph-label">${o.label}</div>
+      </div>
       <div class="ph-check">&#10003;</div>
-      <div class="ph-label">${o.label}</div>
     </button>
   `).join('');
   setCard(`
