@@ -285,6 +285,9 @@
   }
   .vibe-tile .ph-bg {
     position: absolute; inset: 0;
+    background-color: var(--color-primary-pale);
+    background-size: cover;
+    background-position: center;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -673,33 +676,27 @@ const TIMELINE_OPTIONS = [
 ];
 
 const VIBE_OPTIONS = [
-  { id: "beach-close", label: "Close to the Beach", ph: "ph-1" },
-  { id: "surfing", label: "Close to Surfing", ph: "ph-2" },
-  { id: "quiet-neighborhood", label: "Quiet Neighborhood", ph: "ph-3" },
-  { id: "good-schools", label: "Good Schools", ph: "ph-4" },
-  { id: "short-commute", label: "Short Commute", ph: "ph-5" },
-  { id: "city-center", label: "City Center/Downtown", ph: "ph-6" },
-  { id: "close-shopping", label: "Close to Shopping", ph: "ph-2" },
-  { id: "close-restaurants", label: "Close to Restaurants", ph: "ph-3" },
-  { id: "close-work", label: "Close to Work", ph: "ph-4" },
-  { id: "military", label: "Close to Military Base", ph: "ph-5" },
-  { id: "ocean-views", label: "Ocean Views", ph: "ph-1" },
-  { id: "mountain-views", label: "Mountain Views", ph: "ph-6" },
-  { id: "privacy", label: "Privacy", ph: "ph-3" },
-  { id: "large-lot", label: "Large Lot/Green Space", ph: "ph-5" },
-  { id: "low-maintenance", label: "Low Maintenance", ph: "ph-2" },
-  { id: "investment", label: "Investment Potential", ph: "ph-4" },
-  { id: "rental-potential", label: "Rental Potential", ph: "ph-6" },
-  { id: "specific-neighborhood", label: "Specific Neighborhood", ph: "ph-1" },
-  { id: "newer-community", label: "Newer Community", ph: "ph-3" },
-  { id: "gated-community", label: "Gated Community", ph: "ph-5" },
-  { id: "outdoor-lifestyle", label: "Outdoor Lifestyle", ph: "ph-2" },
-  { id: "nightlife", label: "Nightlife Nearby", ph: "ph-4" },
-  { id: "freeway-access", label: "Easy Freeway Access", ph: "ph-6" },
-  { id: "no-hoa", label: "No HOA", ph: "ph-1" },
-  { id: "low-hoa", label: "Low HOA Fees", ph: "ph-3" },
-  { id: "adu", label: "ADU/Ohana Unit", ph: "ph-5" },
-  { id: "str", label: "Short Term Rental", ph: "ph-2" }
+  { id: "beach-close", label: "Close to the Beach" },
+  { id: "surfing", label: "Close to Surfing" },
+  { id: "quiet-neighborhood", label: "Quiet Neighborhood" },
+  { id: "good-schools", label: "Good Schools" },
+  { id: "short-commute", label: "Short Commute" },
+  { id: "city-center", label: "City Center/Downtown" },
+  { id: "military", label: "Close to Military Base" },
+  { id: "ocean-views", label: "Ocean Views" },
+  { id: "mountain-views", label: "Mountain Views" },
+  { id: "large-lot", label: "Large Lot/Green Space" },
+  { id: "investment", label: "Investment Potential" },
+  { id: "rental-potential", label: "Rental Potential" },
+  { id: "specific-neighborhood", label: "Specific Neighborhood" },
+  { id: "newer-community", label: "Newer Community" },
+  { id: "gated-community", label: "Gated Community" },
+  { id: "nightlife", label: "Nightlife Nearby" },
+  { id: "freeway-access", label: "Easy Freeway Access" },
+  { id: "no-hoa", label: "No HOA" },
+  { id: "low-hoa", label: "Low HOA Fees" },
+  { id: "adu", label: "ADU/Ohana Unit" },
+  { id: "str", label: "Short Term Rental" }
 ];
 
 /* Oahu region map — traced from the reference map you provided.
@@ -849,12 +846,18 @@ function renderTimeline() {
 function selectTimeline(id) { state.timeline = id; render(); }
 
 /* ---------- Priorities tile grid ---------- */
+/* Filename convention: tile label with "/" replaced by a space, plus .jpg
+   e.g. "City Center/Downtown" -> images/City Center Downtown.jpg */
+function vibeImagePath(label) {
+  return 'images/' + label.replace(/\//g, ' ') + '.jpg';
+}
 function renderVibe() {
   const tiles = VIBE_OPTIONS.map(o => {
     const selected = state.vibes.includes(o.id);
+    const imgPath = encodeURI(vibeImagePath(o.label));
     return `
     <button class="vibe-tile ${selected?'selected':''}" onclick="toggleVibe('${o.id}')">
-      <div class="ph-bg ${o.ph}"><div class="vibe-label">${o.label}</div></div>
+      <div class="ph-bg" style="background-image:url('${imgPath}')"><div class="vibe-label">${o.label}</div></div>
       <div class="vibe-check">&#10003;</div>
     </button>`;
   }).join('');
