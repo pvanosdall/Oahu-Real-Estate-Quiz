@@ -12,19 +12,21 @@
   /* ============ CONFIG ============
      Edit these values to personalize. See README.md for full setup. */
   :root {
-    --color-bg: #FAF6EC;
-    --color-surface: #FFFFFF;
-    --color-ink: #16302E;
-    --color-ink-soft: #4A5F5C;
-    --color-line: #E4DCC8;
-    --color-primary: #0E4749;
-    --color-primary-light: #1C7A73;
-    --color-primary-pale: #E1EEEC;
-    --color-accent: #F2994A;
-    --color-accent-dark: #B5620F;
-    --color-accent-pale: #FCEADB;
+    --color-bg: #F8F7F4;
+    --color-surface: #E7E1D7;
+    --color-ink: #2C2C2C;
+    --color-ink-soft: #596D72;
+    --color-line: #D7DBDC;
+    --color-primary: #3B5F6B;
+    --color-primary-light: #86ACBB;
+    --color-primary-pale: #E9EEF0;
+    --color-accent: #C89B63;
+    --color-accent-dark: #8C6D45;
+    --color-accent-pale: #F6F0E7;
     --color-hibiscus: #E8637A;
     --color-hibiscus-pale: #FBE6EA;
+    --color-sage: #87977D;
+    --color-sage-pale: #EDEFEB;
     --radius-card: 20px;
     --radius-control: 14px;
     --shadow-card: 0 20px 50px -25px rgba(14, 71, 73, 0.35);
@@ -275,6 +277,7 @@
   }
   .vibe-tile {
     position: relative;
+    isolation: isolate;
     border: none;
     border-radius: 10px;
     overflow: hidden;
@@ -291,34 +294,44 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding: 6px 4px;
+    padding: 7px 5px;
     text-align: center;
   }
   .vibe-tile::after {
     content: "";
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0) 25%, rgba(0,0,0,0.6) 100%);
+    z-index: 1;
   }
+  .vibe-tile .vibe-tint {
+    position: absolute; inset: 0;
+    background: rgba(242, 153, 74, 0.4);
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 2;
+  }
+  .vibe-tile.selected .vibe-tint { opacity: 1; }
   .vibe-tile .vibe-label {
-    position: relative; z-index: 2;
+    position: relative; z-index: 3;
     color: #fff;
     font-family: 'Public Sans', sans-serif;
     font-weight: 700;
-    font-size: 10.5px;
-    line-height: 1.2;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    font-size: 13px;
+    line-height: 1.25;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
   }
   .vibe-tile.selected {
     outline: 3px solid var(--color-accent);
     outline-offset: -3px;
   }
   .vibe-tile .vibe-check {
-    position: absolute; top: 5px; right: 5px; z-index: 3;
-    width: 18px; height: 18px; border-radius: 50%;
+    position: absolute; top: 5px; right: 5px; z-index: 4;
+    width: 20px; height: 20px; border-radius: 50%;
     background: var(--color-accent);
-    color: #fff; font-size: 11px; font-weight: 700;
+    color: #fff; font-size: 12px; font-weight: 700;
     align-items: center; justify-content: center;
     display: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   }
   .vibe-tile.selected .vibe-check { display: flex; }
 
@@ -551,7 +564,7 @@
   .welcome-avatar {
     width: 76px; height: 76px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #2F8F8A, #0E4749);
+    background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
     display: flex; align-items: center; justify-content: center;
     color: #fff;
     font-family: 'Fraunces', serif;
@@ -606,7 +619,7 @@
 
   @media (max-width: 360px) {
     .question-title { font-size: 21px; }
-    .vibe-tile .vibe-label { font-size: 9.5px; }
+    .vibe-tile .vibe-label { font-size: 12px; }
   }
 </style>
 </head>
@@ -858,6 +871,7 @@ function renderVibe() {
     return `
     <button class="vibe-tile ${selected?'selected':''}" onclick="toggleVibe('${o.id}')">
       <div class="ph-bg" style="background-image:url('${imgPath}')"><div class="vibe-label">${o.label}</div></div>
+      <div class="vibe-tint"></div>
       <div class="vibe-check">&#10003;</div>
     </button>`;
   }).join('');
@@ -886,7 +900,7 @@ function regionLabelTspans(zone, textFill) {
 function renderRegion() {
   const zoneShapes = REGION_ZONES.map(z => {
     const selected = state.regions.includes(z.label);
-    const fill = selected ? 'var(--color-primary)' : 'var(--color-primary-pale)';
+    const fill = selected ? 'var(--color-primary)' : 'var(--color-sage-pale)';
     const textFill = selected ? '#ffffff' : 'var(--color-primary)';
     return `
     <g class="map-region" onclick="toggleRegion('${z.label.replace(/'/g,"\\'")}')">
