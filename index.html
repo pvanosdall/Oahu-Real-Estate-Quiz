@@ -324,15 +324,32 @@
   }
 
   /* ---------- Must-have groups ---------- */
-  .musthave-group { margin-bottom: 20px; }
+  .musthave-group {
+    margin-bottom: 16px;
+    padding: 14px 14px 16px;
+    background: var(--color-bg);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  }
   .musthave-group:last-child { margin-bottom: 0; }
+  .musthave-group-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 11px;
+  }
+  .musthave-group-icon {
+    width: 20px; height: 20px;
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+  .musthave-group-icon svg { width: 100%; height: 100%; }
   .musthave-group-title {
     font-size: 11.5px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--color-accent-dark);
-    margin-bottom: 9px;
   }
 
   /* ---------- Beds/baths icon rows ---------- */
@@ -677,12 +694,18 @@
     display: flex;
     align-items: center;
   }
-  .welcome-logo { height: 24px; width: auto; display: block; }
+  .welcome-logo { height: 36px; width: auto; display: block; }
+  .welcome-bizcard {
+    border: 1.5px solid var(--color-primary);
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
   .welcome-profile-row {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-bottom: 14px;
   }
   .welcome-profile-text { flex: 1; min-width: 0; }
   .welcome-name {
@@ -707,16 +730,23 @@
     flex-shrink: 0;
   }
   .welcome-tagline {
-    font-size: 13.5px;
+    font-size: 13px;
     color: var(--color-ink-soft);
     line-height: 1.5;
-    margin-bottom: 20px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid var(--color-line);
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-line);
+    text-align: center;
+    font-style: italic;
   }
   .welcome-title { font-size: 25px; margin-bottom: 12px; }
   .welcome-body { font-size: 15px; line-height: 1.6; color: var(--color-ink-soft); margin-bottom: 18px; }
-  .welcome-meta { font-size: 12.5px; color: var(--color-ink-soft); margin-top: auto; padding-top: 16px; text-align: center; }
+  .site-footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--color-ink-soft);
+    padding: 16px 16px 0;
+  }
   .welcome-badges { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
   .welcome-badge {
     font-size: 12px; font-weight: 600;
@@ -773,6 +803,7 @@
     <div class="tide-label" id="tideLabel">Step 1 of 10</div>
   </div>
   <div class="card" id="card"></div>
+  <div class="site-footer" id="siteFooter"></div>
 </div>
 
 <script>
@@ -902,12 +933,15 @@ const PROPTYPE_OPTIONS = [
   { label: "Investment / short-term-rental property", desc: "Built for rental income or STR potential", icon: ICON_INVEST }
 ];
 
+/* Small icons for the must-haves section headers */
+const ICON_CAT_OUTDOOR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="6" r="2.5"/><path d="M2 19L9 9L13.5 15L16 12L22 19Z"/></svg>`;
+const ICON_CAT_CONDITION = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="12" height="5" rx="1"/><line x1="9" y1="9" x2="9" y2="14"/><rect x="7" y="14" width="4" height="6" rx="1"/></svg>`;
+const ICON_CAT_COMMUNITY = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V10L9 6V21"/><path d="M9 21V3L15 6V21"/><path d="M15 21V9L21 12V21"/><line x1="2" y1="21" x2="22" y2="21"/></svg>`;
+
 const MUSTHAVE_GROUPS = [
-  { title: "Views & Outdoor Space", items: ["Ocean View", "Mountain View", "Large Yard", "Fenced Yard", "Lanai", "Pool"] },
-  { title: "Condition & Style", items: ["Move-in Ready", "Fixer Upper", "Newly Renovated", "Modern Kitchen", "Open Floor Plan", "Stainless Steel Appliances"] },
-  { title: "Parking & Access", items: ["Garage", "Covered Parking", "Multiple Parking Stalls", "Elevator"] },
-  { title: "Building & Community", items: ["Condo Amenities", "Fitness Center", "Gated Community", "Security", "Pet Friendly"] },
-  { title: "Systems & Fees", items: ["Air Conditioning", "Solar Panels (PV)", "In-unit Laundry", "Home Office", "Walk-in Closet", "Low HOA Fees", "No HOA Fees"] }
+  { title: "Views & Outdoor Space", icon: ICON_CAT_OUTDOOR, items: ["Ocean View", "Mountain View", "Large Yard", "Fenced Yard", "Lanai", "Pool"] },
+  { title: "Condition & Style", icon: ICON_CAT_CONDITION, items: ["Move-in Ready", "Fixer Upper", "Newly Renovated", "Modern Kitchen", "Open Floor Plan", "Stainless Steel Appliances", "Air Conditioning", "Solar Panels (PV)", "In-unit Laundry"] },
+  { title: "Building & Community", icon: ICON_CAT_COMMUNITY, items: ["Condo Amenities", "Fitness Center", "Gated Community", "Security", "Pet Friendly", "Garage", "Covered Parking", "Multiple Parking Stalls", "Elevator", "Low HOA Fees", "No HOA Fees"] }
 ];
 
 /* ============ HELPERS ============ */
@@ -970,15 +1004,17 @@ function renderWelcome() {
     <div class="welcome-header-band">
       <img class="welcome-logo" src="${CONFIG.teamLogo}" alt="${CONFIG.teamName}">
     </div>
-    <div class="welcome-profile-row">
-      <div class="welcome-profile-text">
-        <div class="welcome-name">${CONFIG.agentName}</div>
-        <div class="welcome-credentials">License ${CONFIG.agentLicense}</div>
-        <div class="welcome-credentials">Brokered by ${CONFIG.brokerage}</div>
+    <div class="welcome-bizcard">
+      <div class="welcome-profile-row">
+        <div class="welcome-profile-text">
+          <div class="welcome-name">${CONFIG.agentName}</div>
+          <div class="welcome-credentials">License ${CONFIG.agentLicense}</div>
+          <div class="welcome-credentials">Brokered by ${CONFIG.brokerage}</div>
+        </div>
+        <img class="welcome-avatar-photo" src="${CONFIG.agentPhoto}" alt="${CONFIG.agentName}">
       </div>
-      <img class="welcome-avatar-photo" src="${CONFIG.agentPhoto}" alt="${CONFIG.agentName}">
+      <div class="welcome-tagline">${CONFIG.agentTagline}</div>
     </div>
-    <div class="welcome-tagline">${CONFIG.agentTagline}</div>
     <h1 class="welcome-title">${headline}</h1>
     <p class="welcome-body">${body}</p>
     <div class="welcome-badges">
@@ -988,7 +1024,6 @@ function renderWelcome() {
     <div class="nav-row">
       <button class="btn btn-primary btn-wide" onclick="goNext()">Start the quiz</button>
     </div>
-    <div class="welcome-meta">${CONFIG.teamName} of ${CONFIG.brokerage}</div>
   `);
 }
 
@@ -1133,14 +1168,17 @@ function renderMustHaves() {
     `).join('');
     return `
     <div class="musthave-group">
-      <div class="musthave-group-title">${g.title}</div>
+      <div class="musthave-group-header">
+        <div class="musthave-group-icon">${g.icon}</div>
+        <div class="musthave-group-title">${g.title}</div>
+      </div>
       <div class="chip-grid">${chips}</div>
     </div>`;
   }).join('');
   setCard(`
     <div class="eyebrow">Must-haves</div>
     <h2 class="question-title">Anything you can't live without?</h2>
-    <p class="question-sub">Optional, select as many as you'd like.</p>
+    <p class="question-sub">Choose the most important features for your home.</p>
     ${groups}
     ${navRow(true)}
   `);
@@ -1164,7 +1202,7 @@ function renderBeds() {
   setCard(`
     <div class="eyebrow">Space</div>
     <h2 class="question-title">Minimum beds and baths?</h2>
-    <p class="question-sub">Choose the minimum number of beds and baths you can live with, we can always include bigger later.</p>
+    <p class="question-sub">Choose the minimum number of beds and baths you can live with.</p>
     <div class="bedbath-block">
       <div class="bedbath-label-row">
         <div class="bedbath-label">Bedrooms</div>
@@ -1213,7 +1251,7 @@ function renderBudget() {
   setCard(`
     <div class="eyebrow">Budget</div>
     <h2 class="question-title">What's your realistic ceiling?</h2>
-    <p class="question-sub">This stays between us, it just helps me send you the right matches instead of wasting your time.</p>
+    <p class="question-sub">I'll use this to help send you the right matches.</p>
     ${displayHtml}
     <div class="budget-slider-wrap">
       <input type="range" class="budget-slider ${isUnsure?'dimmed':''}" min="${BUDGET_MIN}" max="${BUDGET_MAX}" step="250000" value="${sliderVal}" oninput="onBudgetSlide(this.value)">
@@ -1398,7 +1436,16 @@ function renderThanks() {
     <h1 class="welcome-title">You're all set</h1>
     <p class="welcome-body">Thanks, ${state.name.split(' ')[0] || 'there'}! I've got your search profile and I'll be in touch soon with real matches, not automated listings.${state.emailMeCopy ? ' A copy is headed to your inbox too.' : ''}</p>
     <p class="welcome-body">In the meantime, feel free to reach out anytime.</p>
-    <div class="welcome-meta">${CONFIG.agentName} · ${CONFIG.agentPhone} · ${CONFIG.agentEmail}</div>
+    <div class="welcome-bizcard">
+      <div class="welcome-profile-row">
+        <div class="welcome-profile-text">
+          <div class="welcome-name">${CONFIG.agentName}</div>
+          <div class="welcome-credentials">${CONFIG.agentPhone}</div>
+          <div class="welcome-credentials">${CONFIG.agentEmail}</div>
+        </div>
+        <img class="welcome-avatar-photo" src="${CONFIG.agentPhoto}" alt="${CONFIG.agentName}">
+      </div>
+    </div>
   `);
 }
 
@@ -1410,6 +1457,7 @@ function navRow(enabled, submitFn) {
 }
 function backBtn() { return `<button class="btn btn-ghost" onclick="goBack()">&#8592;</button>`; }
 
+document.getElementById('siteFooter').textContent = `${CONFIG.agentName} · ${CONFIG.teamName} Team of ${CONFIG.brokerage}`;
 render();
 </script>
 </body>
